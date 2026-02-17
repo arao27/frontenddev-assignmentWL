@@ -12,11 +12,16 @@ function Header({ onSearch }) {
   return (
     <header className="header">
       <div className="header-content">
+        {/* Logo / App title links to Home */}
         <Link to="/" className="app-title">MovieShelf</Link>
+
+        {/* Navigation links */}
         <nav className="nav-links">
-          <Link to="/" className="nav-link">Home</Link>
           <Link to="/favorites" className="nav-link">Favorites</Link>
+          <Link to="/watchlist" className="nav-link">Watchlist</Link>
         </nav>
+
+        {/* Search bar */}
         <div className="search-container">
           <form onSubmit={handleSubmit}>
             <input

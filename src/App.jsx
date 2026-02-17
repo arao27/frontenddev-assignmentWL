@@ -3,6 +3,8 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Header from "./components/Header";
 import Home from "./pages/Home";
 import Favorites from "./pages/Favorites";
+import Watchlist from "./pages/Watchlist"; // NEW
+import { MovieProvider } from "./contexts/MovieContext"; // NEW
 import { searchMovies } from "./services/movieService";
 import "./App.css";
 
@@ -27,16 +29,19 @@ function App() {
 
   return (
     <Router>
-      <div className="app">
-        <Header onSearch={handleSearch} />
-        <Routes>
-          <Route
-            path="/"
-            element={<Home searchResults={searchResults} searchQuery={searchQuery} />}
-          />
-          <Route path="/favorites" element={<Favorites />} />
-        </Routes>
-      </div>
+      <MovieProvider> {/* WRAP ROUTES */}
+        <div className="app">
+          <Header onSearch={handleSearch} />
+          <Routes>
+            <Route
+              path="/"
+              element={<Home searchResults={searchResults} searchQuery={searchQuery} />}
+            />
+            <Route path="/favorites" element={<Favorites />} />
+            <Route path="/watchlist" element={<Watchlist />} /> {/* NEW ROUTE */}
+          </Routes>
+        </div>
+      </MovieProvider>
     </Router>
   );
 }

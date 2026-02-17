@@ -1,9 +1,11 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
+import { MovieContext } from "../contexts/MovieContext"; // NEW
 
 function MovieCard({ movie }) {
   const [isFavorite, setIsFavorite] = useState(false);
+  const { watchlist, addToWatchlist, removeFromWatchlist } = useContext(MovieContext); // NEW
 
-  // Check localStorage on mount
+  // Check favorites
   useEffect(() => {
     const favorites = JSON.parse(localStorage.getItem("favorites") || "[]");
     setIsFavorite(favorites.some((f) => f.id === movie.id));
@@ -11,19 +13,18 @@ function MovieCard({ movie }) {
 
   const toggleFavorite = () => {
     const favorites = JSON.parse(localStorage.getItem("favorites") || "[]");
-
     if (isFavorite) {
-      // Remove from favorites
       const updated = favorites.filter((f) => f.id !== movie.id);
       localStorage.setItem("favorites", JSON.stringify(updated));
       setIsFavorite(false);
     } else {
-      // Add to favorites
       favorites.push(movie);
       localStorage.setItem("favorites", JSON.stringify(favorites));
       setIsFavorite(true);
     }
   };
+
+  const inWatchlist = watchlist.some((m) => m.id === movie.id); // NEW
 
   return (
     <div className="movie-card">
@@ -45,6 +46,16 @@ function MovieCard({ movie }) {
         </div>
         <button className="favorite-button" onClick={toggleFavorite}>
           {isFavorite ? "♥ Remove from Favorites" : "♡ Add to Favorites"}
+        </button>
+
+        {/* NEW WATCHLIST BUTTON */}
+        <button
+          className="watchlist-button"
+          onClick={() => {
+            inWatchlist ? removeFromWatchlist(movie.id) : addToWatchlist(movie);
+          }}
+        >
+          {inWatchlist ? "Remove from Watchlist" : "Add to Watchlist"}
         </button>
       </div>
     </div>
